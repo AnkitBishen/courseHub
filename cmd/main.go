@@ -1,12 +1,14 @@
 package main
 
 import (
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/AnkitBishen/courseHub/internal/cros"
 	"github.com/AnkitBishen/courseHub/internal/handler/auth"
+	mysqldb "github.com/AnkitBishen/courseHub/internal/storage/mySqlDb"
 	"github.com/joho/godotenv"
 )
 
@@ -19,12 +21,16 @@ func main() {
 	}
 
 	// connect to database
+	_, dbErr := mysqldb.New()
+	if dbErr != nil {
+		log.Fatal(dbErr)
+	}
 
 	// Start the web server
 	router := http.NewServeMux()
 
 	// manage routes
-	router.HandleFunc("POST /api/auth/login", auth.Register())
+	router.HandleFunc("POST /api/auth/register", auth.Register())
 
 	// handle cros error
 	crosRouter := cros.HandleCros(router)

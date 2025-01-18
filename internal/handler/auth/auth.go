@@ -29,10 +29,10 @@ func Register() http.HandlerFunc {
 		}
 
 		// register the user
-		// fmt.Println(os.Getenv("DB_Name"))
+		// storage.UserRegister(user)
 
 		// send success when registration is done
-		response.WriteJson(w, http.StatusAccepted, response.Success(nil))
+		response.WriteJson(w, http.StatusAccepted, response.Success([]string{"User registered successfully"}))
 	}
 }
 
