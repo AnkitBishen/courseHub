@@ -21,7 +21,7 @@ func main() {
 	}
 
 	// connect to database
-	_, dbErr := mysqldb.New()
+	storage, dbErr := mysqldb.New()
 	if dbErr != nil {
 		log.Fatal(dbErr)
 	}
@@ -30,7 +30,8 @@ func main() {
 	router := http.NewServeMux()
 
 	// manage routes
-	router.HandleFunc("POST /api/auth/register", auth.Register())
+	router.HandleFunc("POST /api/auth/register", auth.Register(storage))
+	router.HandleFunc("POST /api/auth/login", auth.BasicAuth(storage))
 
 	// handle cros error
 	crosRouter := cros.HandleCros(router)
