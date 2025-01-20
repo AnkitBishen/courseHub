@@ -33,5 +33,15 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/headerScript.js"></script>
+<?php
+    if (isset($js)) {
+        foreach ($js as $file) {
+            echo '<script src="' . $file . '"></script>';
+        }
+    }
+?>
 </body>
 </html>
