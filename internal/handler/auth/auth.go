@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/AnkitBishen/courseHub/internal/response"
 	"github.com/AnkitBishen/courseHub/internal/storage"
@@ -15,9 +16,9 @@ import (
 )
 
 var Gconf = &oauth2.Config{
-	ClientID:     "166365392915-p3c9f1a31katdvgied4lsi5o0kpemfo5.apps.googleusercontent.com",
-	ClientSecret: "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",
-	RedirectURL:  "http://localhost:8080/auth/google/callback",
+	ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+	ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	RedirectURL:  os.Getenv("GOOGLE_REDIRECT_URL"),
 	Scopes: []string{
 		"https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email",
 	},
