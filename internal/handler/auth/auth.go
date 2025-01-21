@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/AnkitBishen/courseHub/internal/response"
@@ -117,6 +118,8 @@ func OauthLoginCallback(storage storage.Storage) http.HandlerFunc {
 		}
 		defer res.Body.Close()
 
+		fmt.Println(res.StatusCode, "==", res.Status)
+
 		if res.Status == "200 OK" {
 			// add into Db
 			var user stype.UserRegister
@@ -135,11 +138,11 @@ func OauthLoginCallback(storage storage.Storage) http.HandlerFunc {
 			if res {
 				response.WriteJson(w, http.StatusOK, response.Success("User validate successfully"))
 				return
+			} else {
+				response.WriteJson(w, http.StatusInternalServerError, response.GeneralError("something went wrong"))
 			}
 
 		}
-
-		response.WriteJson(w, http.StatusInternalServerError, response.GeneralError("something went wrong"))
 
 	}
 }

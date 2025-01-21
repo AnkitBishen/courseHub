@@ -95,7 +95,7 @@ func (m MysqlDB) UserLoginValidation(user stype.UserRegister) (bool, error) {
 }
 
 func (m MysqlDB) UserValidateFromOauth(user stype.UserRegister) (bool, error) {
-	stmt, err := m.Db.Prepare(`SELECT email FROM users WHERE email = ? AND password = ?`)
+	stmt, err := m.Db.Prepare(`SELECT email FROM users WHERE email = ?`)
 	if err != nil {
 		return false, err
 	}
@@ -104,7 +104,7 @@ func (m MysqlDB) UserValidateFromOauth(user stype.UserRegister) (bool, error) {
 
 	var userData stype.UserRegister
 
-	err = stmt.QueryRow(user.Email, user.Password).Scan(&userData.Email)
+	err = stmt.QueryRow(user.Email).Scan(&userData.Email)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return false, nil
@@ -113,8 +113,12 @@ func (m MysqlDB) UserValidateFromOauth(user stype.UserRegister) (bool, error) {
 	}
 
 	if user.Email != userData.Email {
-		return false, nil
-	} else {
-		return true, nil
+		// if not found then insert into database as a new user
+		_, err = m.UserRegister(user)
+		if err != nil {
+			return false, err
+		}
 	}
+	return true, nil
+
 }
