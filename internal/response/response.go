@@ -28,10 +28,10 @@ func WriteJson(w http.ResponseWriter, status int, data interface{}) error {
 	return json.NewEncoder(w).Encode(&data)
 }
 
-func GeneralError(err error) Response {
+func GeneralError(err string) Response {
 	return Response{
 		Status: statusErr,
-		Error:  err.Error(),
+		Error:  err,
 	}
 }
 

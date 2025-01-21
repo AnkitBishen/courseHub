@@ -93,3 +93,28 @@ func (m MysqlDB) UserLoginValidation(user stype.UserRegister) (bool, error) {
 		return true, nil
 	}
 }
+
+func (m MysqlDB) UserValidateFromOauth(user stype.UserRegister) (bool, error) {
+	stmt, err := m.Db.Prepare(`SELECT email FROM users WHERE email = ? AND password = ?`)
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	var userData stype.UserRegister
+
+	err = stmt.QueryRow(user.Email, user.Password).Scan(&userData.Email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+
+	if user.Email != userData.Email {
+		return false, nil
+	} else {
+		return true, nil
+	}
+}

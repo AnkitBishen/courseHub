@@ -32,6 +32,8 @@ func main() {
 	// manage routes
 	router.HandleFunc("POST /api/auth/register", auth.Register(storage))
 	router.HandleFunc("POST /api/auth/login", auth.BasicAuth(storage))
+	router.HandleFunc("/api/auth/google/login", auth.OauthLogin())
+	router.HandleFunc("/auth/google/callback", auth.OauthLoginCallback(storage))
 
 	// handle cros error
 	crosRouter := cros.HandleCros(router)
